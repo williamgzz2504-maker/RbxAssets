@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assets Hub & Sol's RNG Release</title>
+
+    <!-- Favicon (inline SVG, diamond/aura icon matching HUD theme) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%2307080a'/%3E%3Ctext x='12' y='17' font-family='Arial,sans-serif' font-size='14' font-weight='900' fill='%23ffffff' text-anchor='middle'%3EA%3C/text%3E%3Crect x='1' y='1' width='22' height='22' fill='none' stroke='%233b82f6' stroke-width='1'/%3E%3C/svg%3E">
+
+    <!-- Open Graph / Social Sharing Preview -->
+    <meta property="og:title" content="Assets Hub — Sol's RNG System">
+    <meta property="og:description" content="Sistema completo de RNG de auras para Roblox: equip/skip, auto-roll infinito y quick roll. Descarga el asset y revisa la documentación.">
+    <meta property="og:image" content="versions/Sol's RNG Assets/V0.1/Sol%27s%20RNG%20Photo%20V0.1.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Assets Hub — Sol's RNG System">
+    <meta name="twitter:description" content="Sistema completo de RNG de auras para Roblox: equip/skip, auto-roll infinito y quick roll.">
+    <meta name="twitter:image" content="versions/Sol's RNG Assets/V0.1/Sol%27s%20RNG%20Photo%20V0.1.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Official Rajdhani Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="py-6 px-4 md:px-8 lg:px-12 min-h-screen flex flex-col relative">
+
+    <!-- VIEW -1: AUTH (Login / Create Account) -->
+    <div id="view-name" class="view-section view-section-flex flex-col items-center justify-center min-h-[85vh] w-full max-w-4xl mx-auto text-center space-y-8">
+        <div class="relative w-full max-w-xl">
+            <div class="absolute inset-0 ac-glow blur-[50px] rounded-full animate-[pulse-slow_3s_ease-in-out_infinite]"></div>
+            <div class="hud-card p-10 md:p-12 rounded-sm relative z-10 border-white/10 border-dashed">
+                <div class="hud-corner hud-corner-tl"></div>
+                <div class="hud-corner hud-corner-tr"></div>
+                <div class="hud-corner hud-corner-bl"></div>
+                <div class="hud-corner hud-corner-br"></div>
+
+                <p class="text-sm md:text-base uppercase tracking-[0.5em] ac-text font-bold mb-4" data-i18n="name_sys">Identity Verification</p>
+
+                <!-- STEP A: choose Login or Create Account -->
+                <div id="auth-choice-step">
+                    <h1 class="text-3xl md:text-4xl font-black tracking-widest text-white uppercase mb-8" data-i18n="auth_choice_title">
+                        ACCESS REQUIRED
+                    </h1>
+                    <div class="flex flex-col items-center gap-4">
+                        <button onclick="showAuthStep('login')" class="group relative inline-flex items-center justify-center px-8 py-4 bg-white/5 border border-white/20 ac-hover transition-all duration-300 rounded-sm overflow-hidden w-full max-w-sm">
+                            <div class="absolute inset-0 ac-glow opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <span class="relative text-base font-bold uppercase tracking-[0.2em] text-white" data-i18n="auth_login_btn">LOG IN</span>
+                        </button>
+                        <button onclick="showAuthStep('create')" class="group relative inline-flex items-center justify-center px-8 py-4 bg-white/5 border border-white/20 ac-hover transition-all duration-300 rounded-sm overflow-hidden w-full max-w-sm">
+                            <div class="absolute inset-0 ac-glow opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <span class="relative text-base font-bold uppercase tracking-[0.2em] text-white" data-i18n="auth_create_btn">CREATE ACCOUNT</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP B1: Login form -->
+                <div id="auth-login-step" class="hidden">
+                    <h1 class="text-3xl md:text-4xl font-black tracking-widest text-white uppercase mb-6" data-i18n="auth_login_title">
+                        LOG IN
+                    </h1>
+                    <div class="flex flex-col items-center gap-4">
+                        <input id="login-name-field" type="text" maxlength="24" oninput="this.value=this.value.toUpperCase()" data-i18n-placeholder="name_placeholder" placeholder="Enter your name" class="w-full max-w-sm bg-[#0d0e12] border border-white/20 text-white text-center text-lg font-bold uppercase tracking-widest rounded-sm ac-focus outline-none p-4">
+                        <input id="login-password-field" type="password" maxlength="32" oninput="this.value=this.value.toUpperCase()" data-i18n-placeholder="password_placeholder" placeholder="Password" class="w-full max-w-sm bg-[#0d0e12] border border-white/20 text-white text-center text-sm font-bold uppercase tracking-widest rounded-sm ac-focus outline-none p-3">
+                        <p id="login-error" class="text-red-400 text-xs font-bold uppercase tracking-wider hidden"></p>
+                        <button onclick="submitLogin()" class="group relative inline-flex items-center justify-center px-8 py-4 bg-white/5 border border-white/20 ac-hover transition-all duration-300 rounded-sm overflow-hidden w-full max-w-sm">
+                            <div class="absolute inset-0 ac-glow opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <span class="relative text-base font-bold uppercase tracking-[0.2em] text-white flex items-center gap-3">
+                                <span data-i18n="auth_login_submit">LOG IN</span>
+                                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </span>
+                        </button>
+                        <button onclick="showAuthStep('choice')" class="text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-white transition-colors mt-2" data-i18n="auth_back">← Back</button>
+                    </div>
+                </div>
+
+                <!-- STEP B2: Create Account form -->
+                <div id="auth-create-step" class="hidden">
+                    <h1 class="text-3xl md:text-4xl font-black tracking-widest text-white uppercase mb-6" data-i18n="auth_create_title">
+                        CREATE ACCOUNT
+                    </h1>
+                    <div class="flex flex-col items-center gap-4">
+                        <input id="create-name-field" type="text" maxlength="24" oninput="this.value=this.value.toUpperCase()" data-i18n-placeholder="name_placeholder" placeholder="Enter your name" class="w-full max-w-sm bg-[#0d0e12] border border-white/20 text-white text-center text-lg font-bold uppercase tracking-widest rounded-sm ac-focus outline-none p-4">
+                        <input id="create-password-field" type="password" maxlength="32" oninput="this.value=this.value.toUpperCase()" data-i18n-placeholder="password_placeholder" placeholder="Password" class="w-full max-w-sm bg-[#0d0e12] border border-white/20 text-white text-center text-sm font-bold uppercase tracking-widest rounded-sm ac-focus outline-none p-3">
+                        <p id="create-error" class="text-red-400 text-xs font-bold uppercase tracking-wider hidden"></p>
+                        <button onclick="submitCreateAccount()" class="group relative inline-flex items-center justify-center px-8 py-4 bg-white/5 border border-white/20 ac-hover transition-all duration-300 rounded-sm overflow-hidden w-full max-w-sm">
+                            <div class="absolute inset-0 ac-glow opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <span class="relative text-base font-bold uppercase tracking-[0.2em] text-white flex items-center gap-3">
+                                <span data-i18n="auth_create_submit">CREATE ACCOUNT</span>
+                                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </span>
+                        </button>
+                        <button onclick="showAuthStep('choice')" class="text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-white transition-colors mt-2" data-i18n="auth_back">← Back</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 0: INTRO SCREEN -->
+    <div id="view-intro" class="view-section view-section-flex flex-col items-center justify-center min-h-[85vh] w-full max-w-4xl mx-auto text-center space-y-8">
+        
+        <div class="relative w-full">
+            <!-- Decorative Background Element -->
+            <div class="absolute inset-0 ac-glow blur-[50px] rounded-full animate-[pulse-slow_3s_ease-in-out_infinite]"></div>
+            
+            <div class="hud-card p-12 rounded-sm relative z-10 border-white/10 border-dashed overflow-hidden">
+                <div class="hud-corner hud-corner-tl"></div>
+                <div class="hud-corner hud-corner-tr"></div>
+                <div class="hud-corner hud-corner-bl"></div>
+                <div class="hud-corner hud-corner-br"></div>
+                
+                <div class="relative z-10">
+                    <p class="text-sm md:text-base uppercase tracking-[0.5em] ac-text font-bold mb-4" data-i18n="intro_sys">Independent Asset Distribution</p>
+                    <h1 id="intro-typing-title" class="text-2xl md:text-5xl font-black tracking-widest text-white uppercase mb-6 min-h-[3em] flex items-center justify-center break-words px-2">
+                        <span id="intro-typing-text" class="break-words"></span>
+                    </h1>
+
+                    <div class="grid gap-6 lg:grid-cols-[1.7fr_1fr] items-start mb-8">
+                        <div class="text-left text-gray-300 text-sm md:text-base leading-relaxed">
+                            <p class="mb-4" data-i18n="intro_guide_overview">Now that your account is created, this quick guide shows you the hub sections as an example. It appears only once and then the hub opens normally.</p>
+                            <p class="mb-4" data-i18n="intro_guide_details">This example explains the asset card, preview controls, settings and version archive. Ignore the dark full-screen background: the useful content is inside the card.</p>
+                            <ul class="list-disc list-inside space-y-3">
+                                <li data-i18n="intro_guide_asset">Asset card: open the release module and view details.</li>
+                                <li data-i18n="intro_guide_preview">Media preview: play the video or enlarge the image.</li>
+                                <li data-i18n="intro_guide_settings">Settings: choose English or Español and keep it next time.</li>
+                                <li data-i18n="intro_guide_versions">Versions: store old builds inside version folders.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 rounded-sm p-5">
+                            <div class="text-xs uppercase tracking-[0.3em] font-bold text-gray-400 mb-3" data-i18n="intro_example_label">Example asset panel</div>
+                            <div class="bg-[#0b0c10] border border-white/10 rounded-sm overflow-hidden">
+                                <div class="h-36 bg-white/5 flex items-center justify-center text-gray-500 text-xs uppercase" data-i18n="intro_example_label">Asset preview image</div>
+                                <div class="p-4">
+                                    <p class="text-white text-sm font-bold uppercase tracking-[0.2em] mb-3" data-i18n="intro_example_title">Sol's RNG V0.1</p>
+                                    <p class="text-gray-400 text-xs leading-relaxed mb-4" data-i18n="intro_example_desc">Preview the main build, watch the demo, and download the current release.</p>
+                                    <button class="w-full py-3 bg-white/10 hover:bg-white/20 text-white uppercase text-xs font-bold rounded-sm" data-i18n="sols_dl_btn">Download</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loading bar (shown while typing/loading sequence runs) -->
+                    <div id="intro-loading-wrap" class="w-full max-w-md mx-auto mb-8 space-y-2">
+                        <div class="loading-track rounded-sm">
+                            <div id="intro-loading-fill" class="loading-fill"></div>
+                        </div>
+                        <p class="text-xs uppercase tracking-[0.3em] text-gray-500 font-bold">
+                            <span id="intro-loading-pct">0%</span> <span data-i18n="intro_loading_label">SYNCING ASSETS</span>
+                        </p>
+                    </div>
+
+                    <button id="intro-access-btn" onclick="finishTutorial()" class="hidden group relative inline-flex items-center justify-center px-8 py-4 bg-white/5 border border-white/20 ac-hover transition-all duration-300 rounded-sm overflow-hidden">
+                        <div class="absolute inset-0 ac-glow opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <span class="relative text-lg font-bold uppercase tracking-[0.2em] text-white flex items-center gap-3">
+                            <span data-i18n="intro_btn">ACCESS HUB</span>
+                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW: SETTINGS -->
+    <div id="view-settings" class="view-section max-w-3xl w-full mx-auto space-y-6 mt-10">
+        
+        <!-- Navigation Bar -->
+        <div class="flex items-center justify-between mb-4">
+            <button onclick="switchView('view-home')" class="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-white transition-colors px-4 py-2 bg-white/5 border border-white/10 rounded-sm hover:bg-white/10">
+                <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                <span data-i18n="settings_back">Return to Directory</span>
+            </button>
+        </div>
+
+        <!-- Settings Panel -->
+        <div class="hud-card p-8 rounded-sm">
+            <div class="hud-corner hud-corner-tl"></div>
+            <div class="hud-corner hud-corner-tr"></div>
+            <div class="hud-corner hud-corner-bl"></div>
+            <div class="hud-corner hud-corner-br"></div>
+
+            <div class="flex flex-col items-center justify-center text-center gap-2 mb-8 border-b border-white/10 pb-6">
+                <svg class="w-12 h-12 text-gray-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <h2 class="text-3xl font-black tracking-widest text-white uppercase" data-i18n="settings_title">SYSTEM SETTINGS</h2>
+            </div>
+
+            <!-- Language Setting -->
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between p-4 bg-white/5 border border-white/10 rounded-sm">
+                <div>
+                    <h3 class="text-lg font-bold text-white uppercase tracking-wider mb-1" data-i18n="settings_lang_title">Language / Idioma</h3>
+                    <p class="text-gray-400 text-sm font-medium" data-i18n="settings_lang_desc">Select your preferred interface language.</p>
+                </div>
+                <div class="mt-4 md:mt-0 w-full md:w-auto">
+                    <select id="language-selector" onchange="changeLanguage(this.value)" class="w-full md:w-64 bg-[#0d0e12] border border-white/20 text-white text-sm font-bold uppercase tracking-wider rounded-sm ac-focus block p-3 outline-none cursor-pointer">
+                        <option value="en-US">English (USA)</option>
+                        <option value="es-LA">Español (Latinoamérica)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Reset identity -->
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between p-4 bg-white/5 border border-white/10 rounded-sm mt-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white uppercase tracking-wider mb-1" data-i18n="settings_identity_title">Stored Identity</h3>
+                    <p class="text-gray-400 text-sm font-medium" data-i18n="settings_identity_desc">Forget your saved name and verify again next visit.</p>
+                </div>
+                <div class="mt-4 md:mt-0 w-full md:w-auto">
+                    <button onclick="forgetName()" class="w-full md:w-auto px-4 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-300 text-sm font-bold uppercase tracking-wider rounded-sm transition-colors" data-i18n="settings_identity_btn">Forget Me</button>
+                </div>
+            </div>
+
+            <!-- Theme selector -->
+            <div class="p-4 bg-white/5 border border-white/10 rounded-sm mt-4" id="theme-selector-row">
+                <h3 class="text-lg font-bold text-white uppercase tracking-wider mb-1" data-i18n="settings_theme_title">Interface Theme</h3>
+                <p class="text-gray-400 text-sm font-medium mb-4" data-i18n="settings_theme_desc">Choose your accent colour.</p>
+                <div class="flex items-center gap-3 flex-wrap">
+                    <button onclick="setTheme('blue')"   id="swatch-blue"   title="Blue (Default)"  class="theme-swatch" style="background:#3b82f6"></button>
+                    <button onclick="setTheme('red')"    id="swatch-red"    title="Red"             class="theme-swatch" style="background:#ef4444"></button>
+                    <button onclick="setTheme('green')"  id="swatch-green"  title="Green"           class="theme-swatch" style="background:#22c55e"></button>
+                    <button onclick="setTheme('yellow')" id="swatch-yellow" title="Yellow"          class="theme-swatch" style="background:#eab308"></button>
+                    <button onclick="setTheme('rgb')"    id="swatch-rgb"    title="RGB"             class="theme-swatch rgb-swatch"></button>
+                    <button onclick="setTheme('gold')"   id="swatch-gold"   title="Gold (Owner)"    class="theme-swatch hidden" style="background:linear-gradient(135deg,#f5c542,#b8860b)"></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- VIEW 1: MAIN ASSETS DIRECTORY -->
+    <div id="view-home" class="view-section max-w-6xl w-full mx-auto space-y-6">
+        
+        <!-- Hub Navigation / Toolbar -->
+        <div class="flex justify-end mb-2">
+            <button onclick="switchView('view-settings')" class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-white transition-colors px-4 py-2 bg-white/5 border border-white/10 rounded-sm hover:bg-white/10">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span data-i18n="btn_settings">SETTINGS</span>
+            </button>
+        </div>
+
+        <!-- Hub Header -->
+        <header class="hud-card p-6 rounded-sm">
+            <div class="hud-corner hud-corner-tl"></div>
+            <div class="hud-corner hud-corner-tr"></div>
+            <div class="hud-corner hud-corner-bl"></div>
+            <div class="hud-corner hud-corner-br"></div>
+            
+            <div class="flex flex-col items-center justify-center text-center gap-2">
+                <p class="text-xs uppercase tracking-[0.4em] text-gray-500 font-bold mb-1" data-i18n="hub_subtitle">Independent Asset Distribution</p>
+                <h1 class="text-4xl md:text-5xl font-black tracking-widest text-white uppercase" data-i18n="hub_title">
+                    ASSETS DIRECTORY
+                </h1>
+                <p id="hub-greeting" class="ac-text text-sm mt-1 font-bold uppercase tracking-widest"></p>
+                <p class="text-gray-400 text-sm mt-2 font-medium" data-i18n="hub_desc">Select a module to view documentation, previews, and download links.</p>
+            </div>
+        </header>
+
+        <!-- Assets Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start mt-8">
+            
+            <!-- Asset Card: Sol's RNG -->
+            <div onclick="switchView('view-sols-rng')" class="hud-card p-1 rounded-sm group cursor-pointer transition-all duration-300 hover:border-white/30 hover:scale-[1.02]">
+                <div class="hud-corner hud-corner-tl"></div>
+                <div class="hud-corner hud-corner-tr"></div>
+                <div class="hud-corner hud-corner-bl"></div>
+                <div class="hud-corner hud-corner-br"></div>
+                
+                <div class="bg-black/50 aspect-video relative overflow-hidden mb-4 border-b border-white/10 flex items-center justify-center">
+                    <img src="versions/Sol's RNG Assets/V0.1/Sol%27s%20RNG%20Photo%20V0.1.png" onerror="this.src='https://placehold.co/600x337/07080a/474853?text=SOL\'S+RNG'" alt="Sol's RNG Thumbnail" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <span class="absolute bottom-3 left-3 text-xs font-bold px-2 py-1 bg-white/10 border border-white/20 rounded-sm text-white backdrop-blur-sm" data-i18n="card1_badge">V0.1 RELEASE</span>
+                </div>
+                
+                <div class="p-4 pt-0">
+                    <h3 class="text-xl font-bold text-white uppercase tracking-wider mb-2 group-hover:text-[var(--accent)] transition-colors" data-i18n="card1_title">Sol's RNG System</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed font-medium mb-4 line-clamp-2" data-i18n="card1_desc">
+                        Complete aura rolling system with equip/skip mechanics, automated infinite rolls, and quick roll bypass features.
+                    </p>
+                    <div class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-500 group-hover:text-white transition-colors">
+                        <span data-i18n="card1_btn">Access Module</span> <span class="ml-2">→</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Asset Card: Placeholder -->
+            <div class="hud-card p-1 rounded-sm opacity-50 border-dashed border-white/20">
+                <div class="hud-corner hud-corner-tl"></div>
+                <div class="hud-corner hud-corner-tr"></div>
+                <div class="hud-corner hud-corner-bl"></div>
+                <div class="hud-corner hud-corner-br"></div>
+                
+                <div class="bg-black/30 aspect-video relative overflow-hidden mb-4 border-b border-white/5 flex items-center justify-center">
+                    <svg class="w-12 h-12 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                </div>
+                
+                <div class="p-4 pt-0">
+                    <h3 class="text-xl font-bold text-gray-400 uppercase tracking-wider mb-2" data-i18n="card2_title">Unassigned Slot</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed font-medium mb-4" data-i18n="card2_desc">
+                        System pending future development. Check back later for new asset releases.
+                    </p>
+                    <div class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-600">
+                        <span data-i18n="card2_btn">Locked</span> <span class="ml-2">🔒</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- VIEW 2: SOL'S RNG ASSET PAGE -->
+    <div id="view-sols-rng" class="view-section max-w-6xl w-full mx-auto space-y-6">
+        
+        <!-- Navigation Bar -->
+        <div class="flex items-center justify-between mb-2">
+            <button onclick="switchView('view-home')" class="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-white transition-colors px-4 py-2 bg-white/5 border border-white/10 rounded-sm hover:bg-white/10">
+                <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                <span data-i18n="sols_back">Return to Directory</span>
+            </button>
+        </div>
+
+        <!-- Header Panel -->
+        <header class="hud-card p-6 rounded-sm">
+            <div class="hud-corner hud-corner-tl"></div>
+            <div class="hud-corner hud-corner-tr"></div>
+            <div class="hud-corner hud-corner-bl"></div>
+            <div class="hud-corner hud-corner-br"></div>
+            
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="text-center md:text-left">
+                    <p class="text-xs uppercase tracking-[0.4em] text-gray-500 font-bold mb-1" data-i18n="sols_subtitle">Asset Distribution Protocol</p>
+                    <h1 class="text-3xl md:text-4xl font-black tracking-widest text-white uppercase" data-i18n="sols_title">
+                        SOL'S RNG ASSETS
+                    </h1>
+                </div>
+                <div class="px-4 py-2 bg-white/5 border border-white/10 text-center rounded-sm">
+                    <span class="block text-xs uppercase tracking-widest text-gray-400 font-bold" data-i18n="sols_phase">Release Phase</span>
+                    <span class="text-lg font-bold text-white tracking-widest uppercase">Version 0.1</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+            
+            <!-- Left Side: Documentation, Media & FAQ -->
+            <div class="lg:col-span-2 space-y-6">
+                
+                <!-- Release Documentation Section -->
+                <section class="hud-card p-6 rounded-sm">
+                    <div class="hud-corner hud-corner-tl"></div>
+                    <div class="hud-corner hud-corner-tr"></div>
+                    <div class="hud-corner hud-corner-bl"></div>
+                    <div class="hud-corner hud-corner-br"></div>
+                    
+                    <div class="flex items-center gap-2 mb-4 text-white font-bold uppercase text-xs tracking-widest">
+                        <span class="text-base text-gray-400">▪</span> <span data-i18n="sols_doc_title">Version Documentation</span>
+                    </div>
+                    
+                    <h2 class="text-2xl font-bold text-white mb-3 uppercase tracking-wider" data-i18n="sols_doc_h2">V0.1 Update</h2>
+                    <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-6 font-medium" data-i18n="sols_doc_p">
+                        This release includes the main loop handlers for the equip and skip mechanics, integrated alongside the classic RNG automation flows detailed in the registry list below.
+                    </p>
+
+                    <!-- Data Table -->
+                    <div class="overflow-x-auto border border-white/10 rounded-sm">
+                        <table class="w-full text-left border-collapse text-xs md:text-sm">
+                            <thead>
+                                <tr class="bg-white/[0.03] border-b border-white/10 text-gray-400 uppercase tracking-widest text-[10px] font-bold">
+                                    <th class="p-4 border-r border-white/10 w-1/3" data-i18n="sols_tbl_h1">System Interface</th>
+                                    <th class="p-4" data-i18n="sols_tbl_h2">Technical Execution & Features</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/10">
+                                <tr class="hover:bg-white/[0.01] transition-colors">
+                                    <td class="p-4 font-bold text-white border-r border-white/10 uppercase tracking-wide" data-i18n="sols_tbl_r1_t">Roll System</td>
+                                    <td class="p-4 text-gray-400 leading-relaxed font-medium" data-i18n="sols_tbl_r1_d">
+                                        Plays a 2.5s animation showing auras cycling through until landing on the final result, then lets you choose to EQUIP or SKIP it.
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-white/[0.01] transition-colors">
+                                    <td class="p-4 font-bold text-white border-r border-white/10 uppercase tracking-wide" data-i18n="sols_tbl_r2_t">Auto-Roll System</td>
+                                    <td class="p-4 text-gray-400 leading-relaxed font-medium" data-i18n="sols_tbl_r2_d">
+                                        Once you press its button to turn it ON, it rolls automatically with the same 2.5s animation, but slightly faster between rolls after the cooldown, since from then on the system triggers each roll for you, no clicking needed per roll.
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-white/[0.01] transition-colors">
+                                    <td class="p-4 font-bold text-white border-r border-white/10 uppercase tracking-wide" data-i18n="sols_tbl_r3_t">Quick Roll System</td>
+                                    <td class="p-4 text-gray-400 leading-relaxed font-medium" data-i18n="sols_tbl_r3_d">
+                                        Completely skips the 2.5s animation and jumps straight to the result, giving you the EQUIP/SKIP choice instantly (does not affect the cooldown).
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Changelog -->
+                    <div class="mt-6 pt-6 border-t border-white/10">
+                        <h3 class="text-xs font-bold uppercase tracking-[0.3em] text-gray-500 mb-4" data-i18n="sols_changelog_title">Changelog</h3>
+                        <div class="space-y-4">
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center pt-1">
+                                    <span class="w-2.5 h-2.5 rounded-full ac-bg border-2 ac-border flex-shrink-0"></span>
+                                </div>
+                                <div>
+                                    <p class="text-white text-sm font-bold uppercase tracking-wide">V0.1 <span class="text-gray-500 font-medium normal-case tracking-normal ml-2" data-i18n="sols_changelog_v01_date">— Jun 27, 2026</span></p>
+                                    <ul class="mt-2 space-y-1 text-gray-400 text-xs md:text-sm font-medium list-none">
+                                        <li data-i18n="sols_changelog_v01_1">+ Roll System with equip/skip selectors</li>
+                                        <li data-i18n="sols_changelog_v01_2">+ Auto-Roll System (press its button to toggle OFF/ON to activate it)</li>
+                                        <li data-i18n="sols_changelog_v01_3">+ Quick Roll System (press its button to toggle OFF/ON to activate it)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Media Section -->
+                <section class="hud-card p-6 rounded-sm">
+                    <div class="hud-corner hud-corner-tl"></div>
+                    <div class="hud-corner hud-corner-tr"></div>
+                    <div class="hud-corner hud-corner-bl"></div>
+                    <div class="hud-corner hud-corner-br"></div>
+                    
+                    <div class="flex items-center gap-2 mb-4 text-white font-bold uppercase text-xs tracking-widest">
+                        <span class="text-base text-gray-400">▪</span> <span data-i18n="sols_media_title">System Media & Preview</span>
+                    </div>
+                    
+                    <h2 class="text-xl font-bold text-white mb-2 uppercase tracking-wide" data-i18n="sols_media_h2">Visual Demonstration</h2>
+                    <p class="text-gray-400 text-xs md:text-sm leading-relaxed mb-4 font-medium" data-i18n="sols_media_p">
+                        Media preview showcasing the actual UI structure in action. Click any frame to expand the viewport.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                        
+                        <!-- Video Slot -->
+                        <div id="video-card" class="aspect-video bg-black border border-white/10 rounded-sm relative overflow-hidden flex items-center justify-center group cursor-pointer transition-all duration-300 hover:border-white/40 hover:scale-[1.01]">
+                            <div class="hud-corner hud-corner-tl"></div>
+                            <div class="hud-corner hud-corner-tr"></div>
+                            <div class="hud-corner hud-corner-bl"></div>
+                            <div class="hud-corner hud-corner-br"></div>
+
+                            <video 
+                                id="main-preview-video"
+                                class="w-full h-full object-cover absolute inset-0 opacity-80 group-hover:opacity-100 transition-all duration-300 pointer-events-none" 
+                                autoplay loop muted playsinline
+                                src="versions/Sol's RNG Assets/V0.1/Sol%27s%20RNG%20Video%20V0.1.mp4">
+                            </video>
+                            
+                            <!-- Hover Overlay -->
+                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-2 transition-all duration-300 z-10 pointer-events-none">
+                                <span class="text-xs uppercase font-extrabold tracking-[0.2em] text-white border border-white/30 px-3 py-1.5 bg-black/90 rounded-sm shadow-xl" data-i18n="sols_media_vid">
+                                    Expand with Sound
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Image Slot -->
+                        <div id="photo-card" class="aspect-video bg-black border border-white/10 flex flex-col items-center justify-center rounded-sm relative group overflow-hidden cursor-pointer transition-all duration-300 hover:border-white/40 hover:scale-[1.01]">
+                            <div class="hud-corner hud-corner-tl"></div>
+                            <div class="hud-corner hud-corner-tr"></div>
+                            <div class="hud-corner hud-corner-bl"></div>
+                            <div class="hud-corner hud-corner-br"></div>
+
+                            <img 
+                                id="main-preview-photo"
+                                alt="Sol's RNG Interface Preview"
+                                class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-300 pointer-events-none"
+                                src="versions/Sol's RNG Assets/V0.1/Sol%27s%20RNG%20Photo%20V0.1.png"
+                                onerror="this.src='https://placehold.co/600x337/07080a/474853?text=Preview+Image'"
+                            >
+
+                            <!-- Hover Overlay -->
+                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-2 transition-all duration-300 z-10 pointer-events-none">
+                                <span class="text-xs uppercase font-extrabold tracking-[0.2em] text-white border border-white/30 px-3 py-1.5 bg-black/90 rounded-sm shadow-xl" data-i18n="sols_media_img">
+                                    Click to Expand
+                                </span>
+                            </div>
+                        </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- FAQ SECTION -->
+                <section class="hud-card p-6 rounded-sm">
+                    <div class="hud-corner hud-corner-tl"></div>
+                    <div class="hud-corner hud-corner-tr"></div>
+                    <div class="hud-corner hud-corner-bl"></div>
+                    <div class="hud-corner hud-corner-br"></div>
+
+                    <div class="flex items-center gap-2 mb-4 text-white font-bold uppercase text-xs tracking-widest">
+                        <span class="text-base text-gray-400">▪</span> <span data-i18n="sols_faq_title">Hub Support & FAQ</span>
+                    </div>
+                    <h2 class="text-xl font-bold text-white mb-4 uppercase tracking-wide" data-i18n="sols_faq_h2">Frequently Asked Questions</h2>
+
+                    <div class="space-y-3">
+                        <!-- FAQ Item 1 -->
+                        <div class="border border-white/5 bg-white/[0.01] rounded-sm transition-all">
+                            <button class="faq-toggle w-full p-4 flex justify-between items-center text-left font-bold text-white uppercase text-xs md:text-sm tracking-wider hover:bg-white/[0.03] transition-colors focus:outline-none">
+                                <span data-i18n="sols_faq_q1">How do I modify aura rarities?</span>
+                                <svg class="w-4 h-4 transform transition-transform duration-200 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                                <div class="p-4 text-xs md:text-sm text-gray-400 border-t border-white/5 leading-relaxed font-medium">
+                                    <p class="mb-2" data-i18n="sols_faq_a1_1">To modify the rarities of the auras, you need to follow this path in the Roblox Studio Explorer:</p>
+                                    
+                                    <div class="flex flex-wrap items-center gap-2 mt-3 bg-black/40 p-3 rounded border border-white/5">
+                                        <code class="bg-[#050505] ac-text px-2 py-1.5 rounded-md border ac-border font-mono shadow-inner flex items-center gap-2">
+                                            <svg class="w-4 h-4 [color:var(--accent)]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg> ReplicatedStorage
+                                        </code>
+                                        <span class="text-gray-600 font-bold">›</span>
+                                        <code class="bg-[#050505] text-yellow-400 px-2 py-1.5 rounded-md border border-yellow-500/20 font-mono shadow-inner flex items-center gap-2">
+                                            <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg> Modules
+                                        </code>
+                                        <span class="text-gray-600 font-bold">›</span>
+                                        <code class="bg-[#050505] text-green-400 px-2 py-1.5 rounded-md border border-green-500/20 font-mono shadow-inner flex items-center gap-2">
+                                            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> Auras
+                                        </code>
+                                    </div>
+                                    <p class="mt-3"><span data-i18n="sols_faq_a1_2">Inside the Auras module script, you will find all the rarity configurations ready to be edited.</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 2 -->
+                        <div class="border border-white/5 bg-white/[0.01] rounded-sm transition-all">
+                            <button class="faq-toggle w-full p-4 flex justify-between items-center text-left font-bold text-white uppercase text-xs md:text-sm tracking-wider hover:bg-white/[0.03] transition-colors focus:outline-none">
+                                <span data-i18n="sols_faq_q2">How often will there be an update?</span>
+                                <svg class="w-4 h-4 transform transition-transform duration-200 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                                <p class="p-4 text-xs md:text-sm text-gray-400 border-t border-white/5 leading-relaxed font-medium" data-i18n="sols_faq_a2">
+                                    Updates for this asset will likely take between 1 and 2 weeks, depending on my available free time.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 3 -->
+                        <div class="border border-white/5 bg-white/[0.01] rounded-sm transition-all">
+                            <button class="faq-toggle w-full p-4 flex justify-between items-center text-left font-bold text-white uppercase text-xs md:text-sm tracking-wider hover:bg-white/[0.03] transition-colors focus:outline-none">
+                                <span data-i18n="sols_faq_q3">How can I contact you?</span>
+                                <svg class="w-4 h-4 transform transition-transform duration-200 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                                <p class="p-4 text-xs md:text-sm text-gray-400 border-t border-white/5 leading-relaxed font-medium" data-i18n="sols_faq_a3">
+                                    At the moment, the only available method to contact me is through Discord.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Side: Downloads -->
+            <div class="space-y-6">
+                <!-- Downloads Panel -->
+                <section class="hud-card p-6 rounded-sm border-white/20">
+                    <div class="hud-corner hud-corner-tl"></div>
+                    <div class="hud-corner hud-corner-tr"></div>
+                    <div class="hud-corner hud-corner-bl"></div>
+                    <div class="hud-corner hud-corner-br"></div>
+                    
+                    <div class="flex items-center gap-2 mb-4 text-white font-bold uppercase text-xs tracking-widest">
+                        <span class="text-base text-gray-400">▪</span> <span data-i18n="sols_dl_title">Asset Download</span>
+                    </div>
+                    
+                    <h2 class="text-lg font-bold text-white mb-2 uppercase tracking-wide" data-i18n="sols_dl_h2">System Build</h2>
+                    <p class="text-gray-400 text-xs md:text-sm leading-relaxed mb-6 font-medium" data-i18n="sols_dl_p">
+                        Download the main file to import into Roblox Studio.
+                    </p>
+                    
+                    <a href="versions/Sol's RNG Assets/V0.1/Sols%20RNG%20SYSTEM%20V0.1.rbxl" download onclick="incrementDownloadCount()" class="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-3 px-4 rounded-sm border border-white/20 transition-colors uppercase tracking-widest text-sm flex items-center justify-center gap-2 shadow-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        <span data-i18n="sols_dl_btn">Download .RBXL</span>
+                    </a>
+                    <p id="rbxl-filesize" class="text-center text-gray-500 text-xs font-bold uppercase tracking-widest mt-3">…</p>
+                    <p id="rbxl-download-count" class="text-center text-gray-600 text-[10px] font-medium uppercase tracking-widest mt-1"></p>
+                </section>
+
+                <!-- Previous Versions Panel -->
+                <section class="hud-card p-6 rounded-sm">
+                    <div class="hud-corner hud-corner-tl"></div>
+                    <div class="hud-corner hud-corner-tr"></div>
+                    <div class="hud-corner hud-corner-bl"></div>
+                    <div class="hud-corner hud-corner-br"></div>
+
+                    <div class="flex items-center gap-2 mb-4 text-white font-bold uppercase text-xs tracking-widest">
+                        <span class="text-base text-gray-400">▪</span> <span data-i18n="sols_prev_title">Version Archive</span>
+                    </div>
+
+                    <h2 class="text-lg font-bold text-white mb-2 uppercase tracking-wide" data-i18n="sols_prev_h2">Previous Versions</h2>
+                    <p class="text-gray-400 text-xs md:text-sm leading-relaxed mb-4 font-medium" data-i18n="sols_prev_p">
+                        Older builds, kept available for compatibility or rollback.
+                    </p>
+
+                    <div id="previous-versions-list" class="space-y-2">
+                        <!-- Populated by JS from the PREVIOUS_VERSIONS array -->
+                    </div>
+
+                    <p id="previous-versions-empty" class="text-gray-500 text-xs font-medium italic hidden" data-i18n="sols_prev_empty">
+                        No previous versions archived yet.
+                    </p>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- EXPAND MEDIA MODAL -->
+    <div id="media-modal" class="fixed inset-0 z-50 hidden items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-black/90 modal-backdrop" onclick="closeModal()"></div>
+        <button onclick="closeModal()" class="absolute top-6 right-6 z-50 p-2 bg-black/50 hover:bg-red-500/80 border border-white/20 hover:border-red-500 rounded-sm text-white transition-all">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <div class="relative z-10 w-full max-w-5xl px-4 flex items-center justify-center" onclick="event.stopPropagation()">
+            <div class="hud-card p-1 rounded-sm shadow-2xl w-full">
+                <div class="hud-corner hud-corner-tl"></div>
+                <div class="hud-corner hud-corner-tr"></div>
+                <div class="hud-corner hud-corner-bl"></div>
+                <div class="hud-corner hud-corner-br"></div>
+                <video id="expanded-video" class="w-full hidden rounded-sm" controls autoplay></video>
+                <img id="expanded-image" class="w-full hidden rounded-sm object-contain max-h-[80vh]" alt="Expanded Preview">
+            </div>
+        </div>
+    </div>
+
+        <script src="js/script.js"></script>
+</body>
+</html>
